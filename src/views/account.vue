@@ -9,38 +9,40 @@
 </template>
 <script>
 import firebase from 'firebase'
+import { ref } from 'vue'
 export default {
   name: "account",
   data() {
     return {
       newUsername: '',
-      currentUser: [],
+      currentUser: '',
     }
   },
   methods: {
   disconnect() {
-      firebase.auth().signOut().then(() => {
-   console.log('Sign-out successful.');
+    firebase.auth().signOut().then(() => {
+  console.log('Sign-out successful.');
+  this.currentUser = ''
   }).catch((error) => {
   // An error happened.
   });
 },
-    updateUsername(){
+  getUsername(){
   firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid)
   .get()
-  .then(function(doc) {
-    if (doc.exists) {
-      console.log("Document data:", doc.data());
-      return doc.data();
-    } else {
-      // doc.data() will be undefined in this case
-      console.log("No such document!");
-    }
+  .then((doc) => {
+    var user = doc.data();
+    console.log(user);
+    return this.currentUser = user.nickname
+    
   }).catch(function(error) {
     console.log("Error getting document:", error);
   });
   }
-}
+},
+mounted() {
+  this.getUsername();
+},
 }
 </script>
 <style lang="">
