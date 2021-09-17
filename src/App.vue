@@ -1,25 +1,29 @@
 <template>
-  <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link>
-      <router-link to="/register">Register</router-link>
-      <router-link to="/login">Login</router-link>
-    </nav>
+  <div class="w-full h-screen">
+    <Header />
     <router-view></router-view>
   </div>
 </template>
 
+<script>
+import Header from './components/Header.vue'
+export default{
+  name: 'App',
+  components: {
+    Header,
+  }
+}
+</script>
+
 <style>
-#nav {
-  padding: 30px;
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
+  #app{
+    width: 100%;
+    height: 100vh;
+  }
 </style>

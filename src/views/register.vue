@@ -6,7 +6,10 @@
 
     <form @submit.prevent="register">
       <div>
-        <input type="text" placeholder="Email" v-model="email">
+        <input type="text" placeholder="Nickname" v-model="nickname">
+      </div>
+      <div>
+        <input type="email" placeholder="Email" v-model="email">
       </div>
       <div>
         <input type="password" placeholder="Password" v-model="password">
@@ -18,30 +21,14 @@
     </div>
 </template>
 <script>
-// import firebase from "firebase";
-
 export default {
   data() {
     return {
+      nickname: "",
       email: "",
       password: "",
       errors: "",
     };
-  },
-
-  methods: {
-    pressed() {
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(this.email, this.password)
-        .then((user) => {
-          console.log(user);
-          this.$router.push("account");
-        })
-        .catch((error) => {
-          this.errors = error;
-        });
-    },
   },
 };
 </script>
@@ -51,6 +38,7 @@ import firebase from "firebase";
 import { useRouter } from "vue-router"; // import router
 const email = ref("");
 const password = ref("");
+const nickname = ref("");
 const router = useRouter(); // get a reference to our vue router
 const register = () => {
   firebase
@@ -58,6 +46,15 @@ const register = () => {
     .createUserWithEmailAndPassword(email.value, password.value) // need .value because ref()
     .then((data) => {
       console.log("Successfully registered!");
+
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(firebase.auth().currentUser.uid)
+        .set({
+          nickname: nickname.value
+        });
+
       router.push("/account"); // redirect to the feed
     })
     .catch((error) => {

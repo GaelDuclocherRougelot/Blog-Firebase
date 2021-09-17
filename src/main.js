@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import firebase from 'firebase'
+import "firebase/firestore"
 
 
 const firebaseConfig = {
@@ -14,6 +15,7 @@ const firebaseConfig = {
   measurementId: "G-WGXRTXMJH4"
 };
 
+
 firebase.initializeApp(firebaseConfig)
 
 const app = createApp(App)
@@ -21,3 +23,5 @@ const app = createApp(App)
 app.use(router)
 
 app.mount('#app')
+
+
