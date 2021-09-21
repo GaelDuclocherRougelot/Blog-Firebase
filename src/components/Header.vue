@@ -1,17 +1,19 @@
 <template lang="">
   <div class="header">
-    <div @click="menuActive = !menuActive" class="hamburger">
-      <span class="line" :class="{line1 : menuActive}"></span>
-      <span class="line" :class="{line2 : menuActive}"></span>
-      <span class="line" :class="{line3 : menuActive}"></span>
-    </div>
+    <button v-if="loggedUser.length == 0" @click="menuActive = !menuActive" :class="{zindex : menuActive}" class="login-text">Se connecter</button>
+    <button v-if="loggedUser.length !== 0" @click="disconnect" class="login-text">Déconnexion</button>
     <div class="menu" :class="{menu_activated : menuActive}">
-      <div class="left">
-        <Login />
-    <!-- <button @click="disconnect">sign-out</button> -->
+      <div class="modal">
+        <img @click="menuActive = false" class="cross" src="https://img.icons8.com/material-rounded/24/000000/delete-sign.png"/>
+        <Login v-if="registerOption" :close="getUsername"/>
+        <Register v-if="!registerOption"/>
+        <p v-if="registerOption" class="p-social">ou utiliser un réseau social</p>
+        <hr>
+        <p v-if="registerOption" class="p-register">Pas encore membre? <span @click="registerOption = !registerOption">S'inscrire</span>.</p>
+        <p v-if="!registerOption" class="p-register">Déja membre? <span @click="registerOption = !registerOption">Connexion</span>.</p>
       </div>
       <div class="right">
-        <Register />
+        
       </div>
     </div>
   </div>
@@ -22,13 +24,13 @@ import Register from "./Register.vue";
 import firebase from "firebase";
 
 export default {
-  name : "Header",
-  components: {Login, Register },
+  name: "Header",
+  components: { Login, Register },
   data() {
     return {
       menuActive: false,
-      newUsername: "",
       loggedUser: "",
+      registerOption: false,
     };
   },
   methods: {
@@ -45,21 +47,22 @@ export default {
         });
     },
     getUsername() {
-      const user = firebase.auth().currentUser
-      console.log(firebase.auth().currentUser.uid);
+      const user = firebase.auth().currentUser;
+      setTimeout(() => {
         firebase
-        .firestore()
-        .collection("users")
-        .doc(user.uid)
-        .get()
-        .then((doc) => {
-          var user = doc.data();
-          console.log(user.nickname);
-          return (this.loggedUser = user.nickname);
-        })
-        .catch(function (error) {
-          console.log("Error getting document:", error);
-        });
+          .firestore()
+          .collection("users")
+          .doc(user.uid)
+          .get()
+          .then((doc) => {
+            var user = doc.data();
+            return (this.loggedUser = user.nickname), (this.menuActive = false);
+          })
+          .catch(function (error) {
+            console.log("Error getting document:", error);
+          });
+      }, 1000);
+        
     },
   },
 };
@@ -89,79 +92,92 @@ export default {
   background-color: #96bafe;
   color: white;
 } */
-.hamburger {
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  flex-direction: column;
-  right: 100px;
-  top: 50px;
-  z-index: 50;
-}
 
 h1 {
   color: white;
 }
-h2{
+h2 {
   color: white;
-}
-
-.line {
-  width: 40px;
-  height: 2px;
-  background-color: #000;
-  margin-top: 8px;
-  transition: all 1s ease;
-  transition-delay: 0.2;
 }
 .menu {
   width: 100%;
-  height: 192vh;
+  height: 198vh;
   position: absolute;
-  background-color: rgb(22, 22, 22);
-  transform: translateY(-195vh);
+  background-color: rgba(0, 0, 0, 0.541);
+  opacity: 0;
   z-index: 49;
-  transition: all 1s ease;
+  transition: all 0.5s ease;
   display: flex;
   align-items: center;
-  overflow-y: hidden;
-}
-.left {
-  width: 100%;
-  height: 100%;
-  display: flex;
   justify-content: center;
-  align-items: center;
-  border-right: #fff 1px solid;
-}
-.right {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 .menu_activated {
-  transform: translateY(0vh);
-  transition: all 1s ease;
+  opacity: 1;
+  transition: all 0.5s ease;
 }
-.line1 {
-  transition: all 1s ease;
-  background-color: rgb(255, 255, 255);
-  transform: translateY(10px);
-}
-.line2 {
-  transition: all 1s ease;
+
+.modal {
+  width: 500px;
+  height: 500px;
+  display: flex;
+  margin: 0px 20px 0px 20px;
+  flex-direction: column;
   background-color: #fff;
-  opacity: 0;
-}
-.line3 {
-  transition: all 1s ease;
-  background-color: rgb(255, 255, 255);
-  transform: translateY(-10px);
+  margin-top: 820px;
+  border-radius: 5px;
 }
 
+.login-text {
+  position: absolute;
+  right: 50px;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 50;
+  padding: 15px;
+  border: none;
+  background-color: #50a3b9;
+  color: #fff;
+  border-radius: 25px;
+  transition: all 0.3s;
+  margin-top: 20px;
+}
+.zindex {
+  z-index: 48;
+}
 
+.login-text:hover {
+  background-color: #54aec7;
+  transition: all 0.3s;
+}
 
+.p-social {
+  text-align: center;
+  color: grey;
+  margin-top: 30px;
+}
+
+hr {
+  margin-top: 20px;
+  width: 90%;
+  margin-left: 25px;
+  border-color: rgba(128, 128, 128, 0.164);
+}
+
+.p-register {
+  text-align: center;
+  margin-top: 30px;
+}
+
+span {
+  color: rgb(0, 204, 255);
+  cursor: pointer;
+}
+
+.cross {
+  position: absolute;
+  margin-top: 15px;
+  margin-left: 450px;
+  cursor: pointer;
+  font-size: 20px;
+}
 </style>

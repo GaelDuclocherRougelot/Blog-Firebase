@@ -1,7 +1,7 @@
 <template lang="">
   <div class="container ">
     <div class="group">
-      <h1>Se connecter</h1>
+      <h1>Connexion</h1>
     <div class="form-group ">
 
     <form @submit.prevent="login">
@@ -11,7 +11,7 @@
       <div>
         <input type="password" placeholder="Mot de passe" v-model="password">
       </div>
-    <button type="submit"><strong>Se connecter</strong></button>
+    <button type="submit" @click="close"><strong>Se connecter</strong></button>
     <p v-if="errMsg"> {{ errMsg }} </p>
     </form>
   </div>
@@ -28,6 +28,9 @@ export default {
       password: "",
       errors: "",
     };
+  },
+  props:{
+    close: { type: Function }
   },
 };
 </script>
@@ -72,9 +75,9 @@ const login = () => {
 <style scoped>
 .container {
   width: 100%;
-  margin-top: 80vh;
   text-align: center;
-  color: #fff;
+  color: rgba(48, 48, 48, 0.966);
+  margin-top: 30px;
 }
 
 .form-group {
@@ -84,25 +87,34 @@ const login = () => {
 
 input {
   border: none;
-  padding: 15px;
-  width: 400px;
-  min-width: 300px;
+  padding: 10px;
+  width: 80%;
+  /* min-width: 300px; */
   margin-top: 20px;
   border-radius: 3px;
   font-size: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.377);
 }
 
 button {
   padding: 15px;
   border: none;
   margin-top: 20px;
-  background-color: rgba(31, 206, 25, 0.808);
+  background-color: #50A3B9;
   color: #fff;
-  border-radius: 3px;
-  transition: all 0.3s
+  border-radius: 25px;
+  transition: all 0.3s;
+  width: 80%;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size:18px;
+  cursor: pointer;
 }
 
 button:hover {
-  background-color: rgb(31, 206, 25)
+  background-color: #54aec7;
+}
+
+h1{
+  font-size: 25px;
 }
 </style>
