@@ -6,16 +6,16 @@
       <div class="modal">
         <img @click="menuActive = false" class="cross" src="https://img.icons8.com/material-rounded/24/000000/delete-sign.png"/>
         <Login v-if="registerOption" :close="getUsername"/>
-        <Register v-if="!registerOption"/>
-        <p v-if="registerOption" class="p-social">ou utiliser un réseau social</p>
+        <Register v-if="!registerOption" :closeMenu="getUsername"/>
+        <img v-if="svg" src="../assets/Pulse.svg" class="svg">
         <hr>
-        <p v-if="registerOption" class="p-register">Pas encore membre? <span @click="registerOption = !registerOption">S'inscrire</span>.</p>
-        <p v-if="!registerOption" class="p-register">Déja membre? <span @click="registerOption = !registerOption">Connexion</span>.</p>
-      </div>
-      <div class="right">
-        
+        <p v-if="registerOption" class="p-register">Pas encore membre ? <span @click="registerOption = !registerOption">S'inscrire</span>.</p>
+        <p v-if="!registerOption" class="p-register">Déja membre ? <span @click="registerOption = !registerOption">Connexion</span>.</p>
       </div>
     </div>
+      <div v-if="loggedUser.length !== 0" class="notif">
+        <p>Bienvenue, {{loggedUser}}</p>
+      </div>
   </div>
 </template>
 <script>
@@ -31,6 +31,7 @@ export default {
       menuActive: false,
       loggedUser: "",
       registerOption: false,
+      svg: false,
     };
   },
   methods: {
@@ -47,22 +48,32 @@ export default {
         });
     },
     getUsername() {
-      const user = firebase.auth().currentUser;
+      this.svg = true; //to be updated with a if(userIsCorrect)
       setTimeout(() => {
-        firebase
-          .firestore()
-          .collection("users")
-          .doc(user.uid)
-          .get()
-          .then((doc) => {
-            var user = doc.data();
-            return (this.loggedUser = user.nickname), (this.menuActive = false);
-          })
-          .catch(function (error) {
-            console.log("Error getting document:", error);
-          });
-      }, 1000);
-        
+        if (firebase.auth().currentUser) {
+          firebase
+            .firestore()
+            .collection("users")
+            .doc(firebase.auth().currentUser.uid)
+            .get()
+            .then((doc) => {
+              var user = doc.data();
+              return (
+                (this.loggedUser = user.nickname),
+                (this.menuActive = false),
+                (this.svg = false)
+              );
+            })
+            .catch(function (error) {
+              console.log("Error getting document:", error);
+            });
+        } else if (user) {
+          this.getUsername(); //double call
+        } else {
+          console.log("Aucun utilisateur trouvé");
+          this.svg = false;
+        }
+      }, 5000);
     },
   },
 };
@@ -118,7 +129,6 @@ h2 {
 
 .modal {
   width: 500px;
-  height: 500px;
   display: flex;
   margin: 0px 20px 0px 20px;
   flex-direction: column;
@@ -166,6 +176,7 @@ hr {
 .p-register {
   text-align: center;
   margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 span {
@@ -174,10 +185,33 @@ span {
 }
 
 .cross {
-  position: absolute;
+  position: relative;
   margin-top: 15px;
-  margin-left: 450px;
+  margin-right: 20px;
+  align-self: flex-end;
   cursor: pointer;
+  width: 25px;
+}
+
+.notif {
+  margin-top: 200px;
+  position: absolute;
+  width: 250px;
+  height: 60px;
+  background-color: rgb(50, 156, 24);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 25px 0px 0px 25px;
+}
+
+.notif > p {
+  color: #fff;
   font-size: 20px;
+}
+
+.svg {
+  width: 100px;
+  align-self: center;
 }
 </style>

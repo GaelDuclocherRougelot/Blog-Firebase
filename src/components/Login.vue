@@ -6,10 +6,10 @@
 
     <form @submit.prevent="login">
       <div>
-        <input type="text" placeholder="Email" v-model="email">
+        <input type="text" placeholder="Email" v-model="email" required>
       </div>
       <div>
-        <input type="password" placeholder="Mot de passe" v-model="password">
+        <input type="password" placeholder="Mot de passe" v-model="password" required>
       </div>
     <button type="submit" @click="close"><strong>Se connecter</strong></button>
     <p v-if="errMsg"> {{ errMsg }} </p>
@@ -58,16 +58,16 @@ const login = () => {
     .catch(error => {
       switch (error.code) {
         case 'auth/invalid-email':
-            errMsg.value = 'Invalid email'
+            errMsg.value = 'Email invalide'
             break
         case 'auth/user-not-found':
-            errMsg.value = 'No account with that email was found'
+            errMsg.value = "Aucun compte n'a été trouvé avec cet email"
             break
         case 'auth/wrong-password':
-            errMsg.value = 'Incorrect password'
+            errMsg.value = 'Mot de passe incorrect'
             break  
         default:
-            errMsg.value = 'Email or password was incorrect'
+            errMsg.value = "l'Email ou le Mot de passe est incorrect"
             break
       }});
 };

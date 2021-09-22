@@ -6,15 +6,15 @@
 
     <form @submit.prevent="register">
       <div>
-        <input type="text" placeholder="Pseudo" v-model="nickname">
+        <input type="text" placeholder="Pseudo" v-model="nickname" required>
       </div>
       <div>
-        <input type="email" placeholder="Email" v-model="email">
+        <input type="email" placeholder="Email" v-model="email" required>
       </div>
       <div>
-        <input type="password" placeholder="Mot de passe" v-model="password">
+        <input type="password" placeholder="Mot de passe" v-model="password" required>
       </div>
-    <button type="submit"><strong>S'inscrire</strong></button>
+    <button type="submit" @click="closeMenu"><strong>S'inscrire</strong></button>
     </form>
   </div>
   </div>
@@ -30,6 +30,9 @@ export default {
       password: "",
       errors: "",
     };
+  },
+    props:{
+    closeMenu: { type: Function }
   },
 };
 </script>
