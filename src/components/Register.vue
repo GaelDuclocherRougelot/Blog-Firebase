@@ -14,7 +14,7 @@
       <div>
         <input type="password" placeholder="Mot de passe" v-model="password" required>
       </div>
-    <button type="submit" @click="closeMenu"><strong>S'inscrire</strong></button>
+    <button type="submit"><strong>S'inscrire</strong></button>
     </form>
   </div>
   </div>
@@ -31,36 +31,37 @@ export default {
       errors: "",
     };
   },
-    props:{
-    closeMenu: { type: Function }
-  },
 };
 </script>
 <script setup>
-import { ref } from "vue";
+import { ref, defineProps } from "vue";
 import firebase from "firebase";
 import { useRouter } from "vue-router"; // import router
 const email = ref("");
 const password = ref("");
 const nickname = ref("");
 const router = useRouter(); // get a reference to our vue router
+  const myProps = defineProps({
+    closeMenu: Function,
+  });
 const register = () => {
   firebase
     .auth() // get the auth api
     .createUserWithEmailAndPassword(email.value, password.value) // need .value because ref()
     .then((data) => {
-      console.log("Successfully registered!");
-      email.value = ""
-      password.value = ""
-      nickname.value = ""
+      console.log("Successfully registered!" + data.user);
+      myProps.closeMenu();
       firebase
         .firestore()
         .collection("users")
         .doc(firebase.auth().currentUser.uid)
         .set({
-          nickname: nickname.value
+          email: email.value,
+          nickname: nickname.value,
         });
-
+        nickname.value = "";
+        email.value = "";
+        password.value = "";
       router.push("/"); // redirect to the feed
     })
     .catch((error) => {
@@ -97,13 +98,13 @@ button {
   padding: 15px;
   border: none;
   margin-top: 20px;
-  background-color: #50A3B9;
+  background-color: #50a3b9;
   color: #fff;
   border-radius: 25px;
   transition: all 0.3s;
   width: 80%;
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size:18px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 18px;
   cursor: pointer;
 }
 
@@ -111,7 +112,7 @@ button:hover {
   background-color: #54aec7;
 }
 
-h1{
+h1 {
   font-size: 25px;
 }
 </style>

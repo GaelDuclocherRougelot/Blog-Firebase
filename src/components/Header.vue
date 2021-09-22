@@ -2,6 +2,8 @@
   <div class="header">
     <button v-if="loggedUser.length == 0" @click="menuActive = !menuActive" :class="{zindex : menuActive}" class="login-text">Se connecter</button>
     <button v-if="loggedUser.length !== 0" @click="disconnect" class="login-text">Déconnexion</button>
+    <!-- <button @click="setCookie" style=top:50px class="login-text">set cookie</button>
+    <button @click="getCookie" style=top:100px class="login-text">get cookie</button> -->
     <div class="menu" :class="{menu_activated : menuActive}">
       <div class="modal">
         <img @click="menuActive = false" class="cross" src="https://img.icons8.com/material-rounded/24/000000/delete-sign.png"/>
@@ -22,6 +24,7 @@
 import Login from "./Login.vue";
 import Register from "./Register.vue";
 import firebase from "firebase";
+import VueCookies from 'vue-cookies'
 
 export default {
   name: "Header",
@@ -41,6 +44,7 @@ export default {
         .signOut()
         .then(() => {
           console.log("Sign-out successful.");
+          $cookies.set("user", "")
           this.loggedUser = "";
         })
         .catch((error) => {
@@ -48,7 +52,7 @@ export default {
         });
     },
     getUsername() {
-      this.svg = true; //to be updated with a if(userIsCorrect)
+      this.svg = true; //to be updated with a if(inputsCorrect)
       setTimeout(() => {
         if (firebase.auth().currentUser) {
           firebase
@@ -61,6 +65,7 @@ export default {
               return (
                 (this.loggedUser = user.nickname),
                 (this.menuActive = false),
+                (this.setCookie()),
                 (this.svg = false)
               );
             })
@@ -75,7 +80,17 @@ export default {
         }
       }, 5000);
     },
+    setCookie(){
+      $cookies.set("user", this.loggedUser)
+    },
+    getCookie(){
+      console.log($cookies.get('user'))
+      this.loggedUser = $cookies.get('user')
+    }
   },
+  mounted(){
+    this.getCookie()
+  }
 };
 </script>
 <style scoped>
@@ -203,12 +218,45 @@ span {
   justify-content: center;
   align-items: center;
   border-radius: 25px 0px 0px 25px;
+  transform: translateX(+300px);
+  transition: all 0.5s ease;
+  animation: activeNotif 5s ease;
 }
 
 .notif > p {
   color: #fff;
   font-size: 20px;
 }
+
+@keyframes activeNotif {
+  0%{
+  transform: translateX(+300px);
+  }
+  50%{
+  transform: translateX(0px);
+  }
+  60%{
+  transform: translateX(0px);
+  }
+  70%{
+  transform: translateX(0px);
+  }
+  80%{
+  transform: translateX(0px);
+  }
+  90%{
+  transform: translateX(+300px);
+  }
+  100%{
+  transform: translateX(+300px);
+  display: none;
+  }
+}
+
+/* .activeNotif {
+  transform: translateX(0px);
+  transition: all 0.5s ease;
+} */
 
 .svg {
   width: 100px;
