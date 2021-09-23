@@ -9,7 +9,7 @@
         <input type="text" placeholder="Pseudo" v-model="nickname" required>
       </div>
       <div>
-        <input type="email" placeholder="Email" v-model="email" required>
+        <input type="email" placeholder="E-mail" v-model="email" required>
       </div>
       <div>
         <input type="password" placeholder="Mot de passe" v-model="password" required>

@@ -6,7 +6,7 @@
 
     <form @submit.prevent="login">
       <div>
-        <input type="text" placeholder="Email" v-model="email" required>
+        <input type="text" placeholder="E-mail" v-model="email" required>
       </div>
       <div>
         <input type="password" placeholder="Mot de passe" v-model="password" required>
@@ -29,9 +29,6 @@ export default {
       errors: "",
     };
   },
-  props:{
-    close: { type: Function }
-  },
 };
 </script>
 
@@ -39,6 +36,11 @@ export default {
 import { ref } from "vue";
 import firebase from "firebase";
 import { useRouter } from "vue-router"; // import router
+import Vuecookies from "vue-cookies"
+
+const myProps = defineProps({
+    closeMenu: Function,
+  });
 
 const email = ref("");
 const password = ref("");
@@ -51,6 +53,7 @@ const login = () => {
     .signInWithEmailAndPassword(email.value, password.value) // need .value because ref()
     .then((data) => {
       console.log("Successfully logged in!");
+      myProps.closeMenu();
       email.value = ""
       password.value = ""
       router.push("/"); // redirect to the feed or account page
@@ -58,7 +61,7 @@ const login = () => {
     .catch(error => {
       switch (error.code) {
         case 'auth/invalid-email':
-            errMsg.value = 'Email invalide'
+            errMsg.value = 'E-mail invalide'
             break
         case 'auth/user-not-found':
             errMsg.value = "Aucun compte n'a été trouvé avec cet email"
