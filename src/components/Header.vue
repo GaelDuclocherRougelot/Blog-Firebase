@@ -3,7 +3,7 @@
     <button v-if="loggedUser == ''"  @click="menuActive = !menuActive" :class="{zindex : menuActive}" class="login-text">Se connecter</button>
     <button v-if="loggedUser !== ''" @click="disconnect" class="login-text">Déconnexion</button>
 
-    <div class="menu" :class="{menu_activated : menuActive}">
+    <div class="menu" v-if="menuActive" :class="{menu_activated : menuActive}">
       
       <div class="modal">
         <img @click="menuActive = false" class="cross" src="https://img.icons8.com/material-rounded/24/000000/delete-sign.png"/>
@@ -22,7 +22,7 @@
         <p v-if="registerOption" class="p-register">
           Mot de passe oublié ? 
           <!-- <span @click="resetPassword = !resetPassword">Réinitialiser</span>. -->
-          <router-link to="/reset">Réinitialiser</router-link>
+          <router-link to="/reset" @click="menuActive = false">Réinitialiser</router-link>
         </p>
         
       </div>

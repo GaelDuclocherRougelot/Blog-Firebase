@@ -3,7 +3,7 @@
     <div class="group">
       <h1>Réinitialiser le mot de passe</h1>
       <div class="form-group">
-        <form @submit.prevent="reset">
+        <form>
           <div>
             <input type="email" placeholder="Email" v-model="email" required />
           </div>
@@ -14,7 +14,6 @@
   </div>
 </template>
 <script>
-import firebase from "firebase";
 export default {
   name: "reset",
   data() {
@@ -23,6 +22,27 @@ export default {
     };
   },
 };
+</script>
+<script setup>
+import { ref } from "vue";
+import firebase from "firebase";
+import { useRouter } from "vue-router";
+const router = useRouter();
+
+const email = ref("");
+
+function resetPassword(){
+  firebase.auth().sendPasswordResetEmail(email.value)
+  .then(() => {
+  })
+  .catch((error) => {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // ..
+  });
+}
+
+
 </script>
 <style scoped>
 .group {
