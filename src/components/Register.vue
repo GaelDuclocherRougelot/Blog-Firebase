@@ -72,10 +72,12 @@ const register = () => {
 </script>
 <style scoped>
 .container {
+  position: relative;
   width: 100%;
   text-align: center;
   color: rgba(48, 48, 48, 0.966);
   margin-top: 30px;
+  z-index: 55;
 }
 
 .form-group {

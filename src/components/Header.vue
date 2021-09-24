@@ -1,23 +1,33 @@
 <template lang="">
   <div class="header">
-    <button v-if="loggedUser.length == 0" @click="menuActive = !menuActive" :class="{zindex : menuActive}" class="login-text">Se connecter</button>
-    <button v-if="loggedUser.length !== 0" @click="disconnect" class="login-text">Déconnexion</button>
+    <button v-if="loggedUser == ''"  @click="menuActive = !menuActive" :class="{zindex : menuActive}" class="login-text">Se connecter</button>
+    <button v-if="loggedUser !== ''" @click="disconnect" class="login-text">Déconnexion</button>
 
     <div class="menu" :class="{menu_activated : menuActive}">
       
       <div class="modal">
         <img @click="menuActive = false" class="cross" src="https://img.icons8.com/material-rounded/24/000000/delete-sign.png"/>
-        <Login v-if="registerOption" :closeMenu="getUsername"/>
-        <Register v-if="!registerOption" :closeMenu="getUsername"/>
+        <Login v-if="registerOption" :closeMenu="getUsername" />
+        <Register v-if="!registerOption" :closeMenu="getUsername" />
         <img v-if="svg" src="../assets/Pulse.svg" class="svg">
         <hr>
-        <p v-if="registerOption" class="p-register">Pas encore membre ? <span @click="registerOption = !registerOption">S'inscrire</span>.</p>
-        <p v-if="!registerOption" class="p-register">Déja membre ? <span @click="registerOption = !registerOption">Connexion</span>.</p>
-        <p v-if="registerOption" class="p-register">Mot de passe oublié ? <span @click="resetPassword">Réinitialiser</span>.</p>
+        <p v-if="registerOption" class="p-register">
+          Pas encore membre ? 
+          <span @click="registerOption = !registerOption">S'inscrire</span>.
+        </p>
+        <p v-if="!registerOption" class="p-register">
+          Déja membre ? 
+          <span @click="registerOption = !registerOption">Connexion</span>.
+        </p>
+        <p v-if="registerOption" class="p-register">
+          Mot de passe oublié ? 
+          <!-- <span @click="resetPassword = !resetPassword">Réinitialiser</span>. -->
+          <router-link to="/reset">Réinitialiser</router-link>
+        </p>
         
       </div>
     </div>
-      <div v-if="loggedUser.length !== 0" :class="{playNotif : animationNotif}" class="notif">
+      <div v-if="loggedUser !== ''" :class="{playNotif : animationNotif}" class="notif">
         <p>Bienvenue, {{loggedUser}}</p>
       </div>
   </div>
@@ -37,6 +47,7 @@ export default {
       registerOption: false,
       svg: false,
       animationNotif: false,
+      resetPassword: false,
     };
   },
   methods: {
@@ -95,24 +106,16 @@ export default {
       this.animationNotif = true;
       setTimeout(() => {
         this.animationNotif = false;
-      }, 5000);
+      }, 4000);
       return this.animationNotif;
     },
-    resetPassword() {
-      firebase.auth().sendPasswordResetEmail(email)
-  .then(() => {
-    // Password reset email sent!
-    // ..
-  })
-  .catch((error) => {
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    // ..
-  });
-    }
   },
   mounted() {
-    this.getCookie();
+    if($cookies.get("user").value !== ''){
+      this.getCookie();
+    }else{
+      console.log('No user in cookie');
+    }
   },
 };
 </script>
@@ -154,7 +157,7 @@ h2 {
   position: absolute;
   background-color: rgba(0, 0, 0, 0.541);
   opacity: 0;
-  z-index: 49;
+  z-index: 50;
   transition: all 0.5s ease;
   display: flex;
   align-items: center;
@@ -170,7 +173,7 @@ h2 {
   right: 50px;
   font-size: 20px;
   cursor: pointer;
-  z-index: 50;
+  z-index: 51;
   padding: 15px;
   border: none;
   background-color: #50a3b9;
@@ -236,6 +239,10 @@ span {
   align-self: center;
 }
 
+.hideComponent{
+  display: none;
+}
+
 /* Notification */
 
 .notif {
@@ -250,7 +257,7 @@ span {
   border-radius: 25px 0px 0px 25px;
   transform: translateX(+300px);
   transition: all 0.5s ease;
-  animation: activeNotif 5s ease infinite;
+  animation: activeNotif 4s ease infinite;
   animation-play-state: paused;
 }
 
