@@ -1,15 +1,22 @@
 <template>
   <div class="home">
-    <h1>Le journal de Gaël</h1>
+    <div class="title">
+      <h1>Le journal de Gaël</h1>
     <p>
       Je partage mes connaissances et ma passion pour le développement et la
       tech.
     </p>
+    </div>
+    
     <div class="section_articles">
+      <div class="tri">
+
+      </div>
       <router-link to="/article1" class="article link">
         <img src="../assets/dev-web.jpg" alt="image code html" />
         <div class="desc">
           <h2 class="link">Comment débuter dans le développement web</h2>
+          <p id="date">24/09/2021</p>
         </div>
       </router-link>
     </div>
@@ -28,21 +35,19 @@ export default {
 .home {
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
-.section1 {
-  width: 100%;
-  height: 400px;
-  overflow: hidden;
+.title {
   display: flex;
-  align-items: center;
   flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  margin-top: 60px;
 }
 h1 {
   font-family: "Abril Fatface", cursive;
   font-weight: 100;
   font-size: 5em;
-  margin-top: 15px;
+  margin-top: 60px;
   margin-left: 15px;
   margin-right: 15px;
 }
@@ -58,36 +63,40 @@ p {
   width: 100%;
   height: 80vh;
   display: flex;
-  align-items: center;
+  /* align-items: center; */
+  flex-direction: column;
 }
 
 .article {
   width: 500px;
-  height: 400px;
+  height: 440px;
   margin: 40px;
+  margin-top: 80px;
   display: flex;
   align-items: center;
   flex-direction: column;
   overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 5px 1px 20px 1px rgba(0, 0, 0, 0.432);
+  transition: all 0.3s ease;
 }
 
 .desc {
-  z-index: 10;
   width: 100%;
-  height: 150px;
+  height: 200px;
   background-color: whitesmoke;
+  display: flex;
+  flex-direction: column;
 }
 
 img {
-  z-index: 9;
   width: 500px;
   object-fit: cover;
-  transition: all 0.3s ease;
 }
 
-.link:hover > img {
+.article:hover {
   transition: all 0.3s ease;
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .link {
@@ -102,5 +111,17 @@ h2 {
   font-family: "Quicksand", sans-serif;
   font-weight: 200;
   padding: 25px;
+}
+
+.tri{
+  width: 100%;
+  height: 60px;
+  margin-top: 80px;
+  background: whitesmoke;
+}
+
+#date{
+  margin: 0;
+  margin-left: 25px;
 }
 </style>

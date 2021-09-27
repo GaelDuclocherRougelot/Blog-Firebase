@@ -1,5 +1,6 @@
 <template lang="">
   <div class="header">
+    <router-link to="/"><span style="margin-left: 20px;font-size: 25px">MyLogo.</span></router-link>
     <button v-if="loggedUser == ''"  @click="menuActive = !menuActive" :class="{zindex : menuActive}" class="login-text">Se connecter</button>
     <button v-if="loggedUser !== ''" @click="disconnect" class="login-text">Déconnexion</button>
 
@@ -124,12 +125,13 @@ export default {
 .header {
   width: 100%;
   height: 80px;
-  position: sticky;
-  background-color: rgb(255, 255, 255);
+  position: fixed;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   overflow-y: none;
+  background-color: whitesmoke;
+  box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.432);
+
 }
 .link {
   margin: 10px;
@@ -180,7 +182,6 @@ h2 {
   color: #fff;
   border-radius: 25px;
   transition: all 0.3s;
-  margin-top: 20px;
 }
 .zindex {
   z-index: 48;
@@ -193,6 +194,8 @@ h2 {
 
 /* MODAL  */
 .modal {
+  position: relative;
+  z-index: 51;
   width: 500px;
   display: flex;
   margin: 0px 20px 0px 20px;
@@ -248,6 +251,7 @@ span {
 .notif {
   margin-top: 200px;
   position: absolute;
+  right: 0;
   width: 250px;
   height: 60px;
   background-color: rgb(50, 156, 24);
@@ -287,11 +291,10 @@ span {
     transform: translateX(0px);
   }
   90% {
-    transform: translateX(+300px);
+    transform: translateX(0px);
   }
   100% {
     transform: translateX(+300px);
-    display: none;
   }
 }
 </style>
