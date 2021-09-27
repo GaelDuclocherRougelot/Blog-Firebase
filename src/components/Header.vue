@@ -297,4 +297,14 @@ span {
     transform: translateX(+300px);
   }
 }
+
+@media  (max-width:650px){
+  .login-text{
+    right: 25px;
+    font-size: 15px;
+  }
+  .modal{
+    margin-top: 600px;
+  }
+}
 </style>

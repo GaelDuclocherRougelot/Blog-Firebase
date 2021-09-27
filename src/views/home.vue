@@ -9,9 +9,9 @@
     </div>
     
     <div class="section_articles">
-      <div class="tri">
+      <!-- <div class="tri">
 
-      </div>
+      </div> -->
       <router-link to="/article1" class="article link">
         <img src="../assets/dev-web.jpg" alt="image code html" />
         <div class="desc">
@@ -64,14 +64,12 @@ p {
   height: 80vh;
   display: flex;
   /* align-items: center; */
-  flex-direction: column;
 }
 
 .article {
-  width: 500px;
-  height: 440px;
-  margin: 40px;
-  margin-top: 80px;
+  width: clamp(300px, 100vw, 20%);
+  height: 450px;
+  margin: 80px 40px 0px 35px;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -81,16 +79,20 @@ p {
   transition: all 0.3s ease;
 }
 
+
+
+
+
 .desc {
   width: 100%;
-  height: 200px;
+  height: 100%;
   background-color: whitesmoke;
   display: flex;
   flex-direction: column;
 }
 
 img {
-  width: 500px;
+  width: clamp(520px, 100vw, 30%);
   object-fit: cover;
 }
 
@@ -123,5 +125,38 @@ h2 {
 #date{
   margin: 0;
   margin-left: 25px;
+}
+
+@media  (max-width:1252px){
+  .article{
+    height: 520px;
+  }
+}
+@media (max-width:650px) {
+  .section_articles{
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 10px;
+  }
+  h2{
+    font-size: 25px
+  }
+  
+}
+@media (max-width:450px) {
+  .article{
+    width: 200px;
+    height: 380px;
+  }
+  h2{
+    font-size: 20px
+  }
+  img{
+    width: 350px;
+  }
+  #date{
+    font-size: 15px;
+  }
+  
 }
 </style>
